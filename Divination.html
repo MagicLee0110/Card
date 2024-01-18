@@ -147,7 +147,7 @@
         </div>
 
         <div class="step hidden" id="step10" style="text-align: center;">
-            <p>2023/<span id="resultValueY"></span>/<span id="resultMessage"></span> 12:<span id="resultValue"></span></p>
+            <p>2023/<span id="resultMessage"></span>/<span id="resultValueY"></span> 12:<span id="resultValue"></span></p>
         </div>
     </div>
 
@@ -194,6 +194,57 @@
             var userInputY = document.getElementById('userInputY');
             userInputY.value += digit;
         }
+
+function resetCalculator() {
+    // 清除輸入的數字
+    document.getElementById('userInput').value = '';
+    document.getElementById('userInputY').value = '';
+
+    // 顯示輸入元素和標籤
+    var userInput = document.getElementById('userInput');
+    var digitButtons = document.getElementById('digitButtons');
+    var userInputY = document.getElementById('userInputY');
+    var digitButtonsY = document.getElementById('digitButtonsY');
+    var inputLabel = document.getElementById('inputLabel');
+    var inputLabelY = document.getElementById('inputLabelY');
+    
+    userInput.style.display = 'inline-block';
+    digitButtons.style.display = 'flex';
+    userInputY.style.display = 'inline-block';
+    digitButtonsY.style.display = 'flex';
+    inputLabel.style.display = 'inline-block';
+    inputLabelY.style.display = 'inline-block';
+
+    // 重新設定水平置中樣式
+    userInput.style.margin = '10px auto';
+    digitButtons.style.justifyContent = 'center';
+    userInputY.style.margin = '10px auto';
+    digitButtonsY.style.justifyContent = 'center';
+    
+    // 重新設定垂直居中樣式
+    inputLabel.style.textAlign = 'left'; // Change this back to 'left'
+    inputLabelY.style.textAlign = 'left';
+
+    // 顯示計算和重新輸入按鈕
+    var calculateButton = document.getElementById('calculateButton');
+    var resetButton = document.getElementById('resetButton');
+
+    calculateButton.style.display = 'block';
+    resetButton.style.display = 'block';
+
+    // 重新設定水平置中樣式
+    calculateButton.style.margin = '10px auto';
+    resetButton.style.margin = '10px auto';
+
+    // 隱藏計算器區域
+    document.getElementById('calculator').style.display = 'none';
+
+    // 隱藏所有步驟
+    var steps = document.querySelectorAll('.step');
+    for (var i = 0; i < steps.length; i++) {
+        steps[i].classList.add('hidden');
+    }
+}
 
 
         function calculate() {
