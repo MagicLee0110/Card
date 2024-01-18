@@ -1,227 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta charset="UTF-8">
-  <title>紙牌占卜</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-      background-color: #f0f0f0; /* 背景色 */
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta charset="UTF-8">
+    <title>紙牌占卜</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f0f0; /* 背景色 */
+        }
 
-    #title {
-      font-size: 36px;
-      color: #333;
-      margin-bottom: 20px;
-    }
+        #title {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-    #calculator {
-      display: none;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      padding: 20px;
-      margin-top: 20px;
-    }
+        #calculator {
+            display: none;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
 
-    #inputLabel {
-      font-size: 18px;
-      color: #555; /* 文字顏色 */
-    }
+        .step {
+            position: relative;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            text-align: left; /* 設定文字對齊方式為左邊 */
+        }
 
-    #userInput {
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-    }
+        .step::after {
+            content: "";
+            display: block;
+            border-bottom: 1px solid #ccc;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
 
-    #digitButtons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+        #inputLabel,
+        #inputLabelY {
+            font-size: 18px;
+            color: #555; /* 文字顏色 */
+        }
 
-    .digit-button {
-      margin: 5px;
-      padding: 20px;
-      font-size: 20px;
-      background-color: #4CAF50; /* 按鈕背景色 */
-      color: #fff; /* 按鈕文字顏色 */
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+        #userInput,
+        #userInputY {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
 
-    .digit-button:hover {
-      background-color: #45a049; /* 滑鼠懸停時的背景色 */
-    }
+        #digitButtons,
+        #digitButtonsY {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-    #calculateButton,
-    #resetButton {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 18px;
-      background-color: #008CBA; /* 按鈕背景色 */
-      color: #fff; /* 按鈕文字顏色 */
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+        .digit-button {
+            margin: 5px;
+            padding: 20px;
+            font-size: 20px;
+            background-color: #4CAF50; /* 按鈕背景色 */
+            color: #fff; /* 按鈕文字顏色 */
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    .step {
-      position: relative;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      text-align: left; /* 設定文字對齊方式為左邊 */
-    }
+        .digit-button:hover {
+            background-color: #45a049; /* 滑鼠懸停時的背景色 */
+        }
 
-    .step::after {
-      content: "";
-      display: block;
-      border-bottom: 1px solid #ccc;
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      left: 0;
-    }
+        #calculateButton,
+        #resetButton {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #008CBA; /* 按鈕背景色 */
+            color: #fff; /* 按鈕文字顏色 */
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    #calculateButton:hover,
-    #resetButton:hover {
-      background-color: #0077A7; /* 滑鼠懸停時的背景色 */
-    }
-  </style>
+        #calculateButton:hover,
+        #resetButton:hover {
+            background-color: #0077A7; /* 滑鼠懸停時的背景色 */
+        }
+
+    </style>
 </head>
+
 <body>
 
-  <h1 id="title">紙牌占卜</h1>
+    <h1 id="title">紙牌占卜</h1>
 
-  <div id="calculator">
+    <div id="calculator">
 
-    <div class="step" id="step1">
-      <p>1. 給予被占卜者一張撲克牌並放入口袋。</p>
+        <div class="step" id="step1">
+            <p>1. 給予被占卜者一張撲克牌並放入口袋。</p>
+        </div>
+
+        <div class="step hidden" id="step2">
+            <p>2. 桌上放置一副Bicycle撲克牌。</p>
+        </div>
+
+        <div class="step hidden" id="step3">
+            <p>3. 計算被占卜者的生命數字，生命數字為"生日日期"+"生日月分"。</p>
+        </div>
+
+        <div class="step hidden" id="step4">
+            <p>4. 洗亂桌上的撲克牌。</p>
+        </div>
+
+        <div class="step hidden" id="step5">
+            <p>5. 讓被占卜者拿起撲克牌數到"生命數字"對應的牌，並記住這張牌。</p>
+        </div>
+
+        <div class="step hidden" id="step6">
+            <p>6. 詢問被占卜者此撲克牌對他的意義。</p>
+        </div>
+
+        <div class="step hidden" id="step7">
+            <p>7. 解讀被占卜者之星座</p>
+        </div>
+
+        <div class="step hidden" id="step8">
+            <p>8. 解讀被占卜者之生日</p>
+        </div>
+
+        <div class="step hidden" id="step9">
+            <p>9. 給予預示與祝福</p>
+        </div>
+
+        <div class="step hidden" id="step10" style="text-align: center;">
+            <p>2023/<span id="resultValueY"></span>/<span id="resultMessage"></span> 12:<span id="resultValue"></span></p>
+        </div>
     </div>
 
-    <div class="step hidden" id="step2">
-      <p>2. 桌上放置一副Bicycle撲克牌。</p>
+    <label for="userInput" id="inputLabel">輸入生命數字：</label>
+    <input type="text" id="userInput" placeholder="生命數字" readonly>
+    <div id="digitButtons">
+        <button class="digit-button" onclick="appendDigit(0)">0</button>
+        <button class="digit-button" onclick="appendDigit(1)">1</button>
+        <button class="digit-button" onclick="appendDigit(2)">2</button>
+        <button class="digit-button" onclick="appendDigit(3)">3</button>
+        <button class="digit-button" onclick="appendDigit(4)">4</button>
+        <button class="digit-button" onclick="appendDigit(5)">5</button>
+        <button class="digit-button" onclick="appendDigit(6)">6</button>
+        <button class="digit-button" onclick="appendDigit(7)">7</button>
+        <button class="digit-button" onclick="appendDigit(8)">8</button>
+        <button class="digit-button" onclick="appendDigit(9)">9</button>
     </div>
 
-    <div class="step hidden" id="step3">
-      <p>3. 計算被占卜者的生命數字，生命數字為"生日日期"+"生日月分"。</p>
+    <label for="userInputY" id="inputLabelY">輸入peek數字：</label>
+    <input type="text" id="userInputY" placeholder="輸入數字" readonly>
+    <div id="digitButtonsY">
+        <button class="digit-button" onclick="appendDigitY(0)">0</button>
+        <button class="digit-button" onclick="appendDigitY(1)">1</button>
+        <button class="digit-button" onclick="appendDigitY(2)">2</button>
+        <button class="digit-button" onclick="appendDigitY(3)">3</button>
+        <button class="digit-button" onclick="appendDigitY(4)">4</button>
+        <button class="digit-button" onclick="appendDigitY(5)">5</button>
+        <button class="digit-button" onclick="appendDigitY(6)">6</button>
+        <button class="digit-button" onclick="appendDigitY(7)">7</button>
+        <button class="digit-button" onclick="appendDigitY(8)">8</button>
+        <button class="digit-button" onclick="appendDigitY(9)">9</button>
     </div>
 
-    <div class="step hidden" id="step3">
-      <p>4. 洗亂桌上的撲克牌。</p>
-    </div>
+    <button id="calculateButton" onclick="calculate()">進入占卜</button>
+    <button id="resetButton" onclick="resetCalculator()">重新輸入</button>
 
-    <div class="step hidden" id="step4">
-      <p>5. 讓被占卜者拿起撲克牌數到"生命數字"對應的牌，並記住這張牌。</p>
-    </div>
+    <script>
+        function appendDigit(digit) {
+            var userInput = document.getElementById('userInput');
+            userInput.value += digit;
+        }
 
-    <div class="step hidden" id="step5">
-      <p>6. 詢問被占卜者此撲克牌對他的意義。</p>
-    </div>
+        function appendDigitY(digit) {
+            var userInputY = document.getElementById('userInputY');
+            userInputY.value += digit;
+        }
 
-    <div class="step hidden" id="step6">
-      <p>7. 解讀被占卜者之星座</p>
-    </div>
 
-    <div class="step hidden" id="step6">
-      <p>8. 解讀被占卜者之生日</p>
-    </div>
+        function calculate() {
+            // 顯示步驟1
+            document.getElementById('step1').classList.remove('hidden');
 
-    <div class="step hidden" id="step6">
-      <p>9. 給予預示與祝福</p>
-    </div>
+            var userInput = document.getElementById('userInput').value;
+            var userInputY = document.getElementById('userInputY').value;
 
-   <div class="step hidden" id="step7" style="text-align: center;">
-      <p>2024/01/18 12:<span id="resultValue"></span></p>
-   </div>
+            if (isNaN(userInput) || isNaN(userInputY)) {
+                alert('請輸入有效數字');
+                return;
+            }
 
-    <!-- 添加更多步驟... -->
-  </div>
+            // 計算結果1
+            var result1 = parseFloat(userInput) - parseFloat(userInputY);
 
-  <script>
-    function appendDigit(digit) {
-      var userInput = document.getElementById('userInput');
-      userInput.value += digit;
-    }
+            // 計算結果2
+            var result2 = 43 - parseFloat(userInput);
 
-    function calculate() {
-      // 顯示步驟1
-      document.getElementById('step1').classList.remove('hidden');
+            // 計算結果3
+            var result3 = parseFloat(userInputY);
 
-      var userInput = document.getElementById('userInput').value;
-      if (isNaN(userInput)) {
-        alert('請輸入有效數字');
-        return;
-      }
+            // 顯示步驟2
+            document.getElementById('step2').classList.remove('hidden');
 
-      // 進行計算
-      var result = 43 - parseFloat(userInput);
+            // 顯示步驟3
+            document.getElementById('step3').classList.remove('hidden');
+            document.getElementById('resultValue').innerText = result2;
 
-      // 顯示步驟2
-      document.getElementById('step2').classList.remove('hidden');
+            // 顯示步驟8
+            document.getElementById('step8').classList.remove('hidden');
+            document.getElementById('resultValueY').innerText = result3;
 
-      // 顯示步驟3
-      document.getElementById('step3').classList.remove('hidden');
-      document.getElementById('resultValue').innerText = result;
+            // 顯示步驟9
+            document.getElementById('step9').classList.remove('hidden');
+            document.getElementById('resultMessage').innerText = result1;
 
-      // 隱藏輸入框和按鈕
-      document.getElementById('userInput').style.display = 'none';
-      document.getElementById('digitButtons').style.display = 'none';
-      document.getElementById('inputLabel').style.display = 'none';
+            // 隱藏輸入框和按鈕
+            document.getElementById('userInput').style.display = 'none';
+            document.getElementById('digitButtons').style.display = 'none';
+            document.getElementById('userInputY').style.display = 'none';
+            document.getElementById('digitButtonsY').style.display = 'none';
+            document.getElementById('inputLabel').style.display = 'none';
+            document.getElementById('inputLabelY').style.display = 'none';
 
-      // 隱藏計算和重新輸入按鈕
-      document.getElementById('calculateButton').style.display = 'none';
-      document.getElementById('resetButton').style.display = 'none';
+            // 隱藏計算和重新輸入按鈕
+            document.getElementById('calculateButton').style.display = 'none';
+            document.getElementById('resetButton').style.display = 'none';
 
-      // 顯示計算器區域
-      document.getElementById('calculator').style.display = 'block';
-    }
-
-    function resetCalculator() {
-      // Reset input and display
-      document.getElementById('userInput').value = '';
-
-      // Hide steps and result
-      document.getElementById('step1').classList.add('hidden');
-      document.getElementById('step2').classList.add('hidden');
-      document.getElementById('step3').classList.add('hidden');
-
-      // Show input elements and hide calculator area
-      document.getElementById('userInput').style.display = 'inline-block';
-      document.getElementById('digitButtons').style.display = 'flex';
-      document.getElementById('inputLabel').style.display = 'inline-block';
-
-      // 顯示計算和重新輸入按鈕
-      document.getElementById('calculateButton').style.display = 'block';
-      document.getElementById('resetButton').style.display = 'block';
-    }
-  </script>
-
-  <label for="userInput" id="inputLabel">輸入生命數字：</label>
-  <input type="text" id="userInput" placeholder="生命數字" readonly>
-  <div id="digitButtons">
-    <button class="digit-button" onclick="appendDigit(0)">0</button>
-    <button class="digit-button" onclick="appendDigit(1)">1</button>
-    <button class="digit-button" onclick="appendDigit(2)">2</button>
-    <button class="digit-button" onclick="appendDigit(3)">3</button>
-    <button class="digit-button" onclick="appendDigit(4)">4</button>
-    <button class="digit-button" onclick="appendDigit(5)">5</button>
-    <button class="digit-button" onclick="appendDigit(6)">6</button>
-    <button class="digit-button" onclick="appendDigit(7)">7</button>
-    <button class="digit-button" onclick="appendDigit(8)">8</button>
-    <button class="digit-button" onclick="appendDigit(9)">9</button>
-  </div>
-  <button id="calculateButton" onclick="calculate()">進入占卜</button>
-  <button id="resetButton" onclick="resetCalculator()">重新輸入</button>
+            // 顯示計算器區域
+            document.getElementById('calculator').style.display = 'block';
+        }
+    </script>
 
 </body>
+
 </html>
